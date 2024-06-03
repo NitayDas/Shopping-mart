@@ -1,0 +1,29 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+          <header class="mt-8 ">
+            <div class="container-fluid  w-9/12 mx-auto bg-sky-300 p-12 shadow-lg rounded-md"><br>
+                <form action="" method="post">{% csrf_token %}
+                  <h2 class="text-xl font-medium mb-4 ml-4"> Please Login </h2><br><br>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control w-9/12 block border rounded-lg px-4 py-2 mb-4" placeholder="Enter your username" name="username" id="username" required>
+                </div>
+              
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control w-9/12 block border rounded-lg px-4 py-2 mb-4" placeholder="Enter password" id="password" name="password" required>
+                </div>
+                <div>
+                    <br>
+                    <button class="bg-indigo-600 btn btn-primary hover:bg-indigo-500 rounded-lg px-4 py-2 text-white font-medium mb-4">Login</button>
+                </div>
+               </form>
+
+               <div>
+                <a href={% url 'signup' %} style="color:black"><button class="text-black hover:text-indigo-700 font-medium" >Don't have an account?</button></a><br><br>
+              </div>
+           
+             </div>
+            </header>
+
+{% endblock content %}
