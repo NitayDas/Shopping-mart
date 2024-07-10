@@ -152,7 +152,7 @@
 
 
 
-	  <script src="https://www.paypal.com/sdk/js?client-id=AX-VrJu4eVcZgosPFC05U3X6XhpsOyfGU-M3TmlAXB6f4Z6Di6VZIHzMseRlKX3dWyuKn8dFJzTvnnP4&currency=USD&disable-funding=credit"></script>
+	  {% comment %} <script src="https://www.paypal.com/sdk/js?client-id=AX-VrJu4eVcZgosPFC05U3X6XhpsOyfGU-M3TmlAXB6f4Z6Di6VZIHzMseRlKX3dWyuKn8dFJzTvnnP4&currency=USD&disable-funding=credit"></script>
 
 	  <script>
 		  var total = '{{ total_with_discount|default:total }}';
@@ -176,18 +176,26 @@
 				  });
 			  }
 		  }).render('#paypal-button-container');
-	  </script>
+	  </script> {% endcomment %}
 	  
 	  <script type="text/javascript">
-		  var form = document.getElementById('form')
+		  var form = document.getElementById('form');
           form.addEventListener('submit', function(e){
             e.preventDefault()
             console.log("form submitted..")
             document.getElementById('form-button').classList.add('hidden')
             document.getElementById('payment-info').classList.remove('hidden')
 
-          })
+          });
 
-          
+          document.getElementById('make-payment').addEventListener('click',function(e){
+              submitFormData();
+          });
+
+          function submitFormData(){
+            console.log('payment button clicked');
+          }
+
+
 	  </script>
 	  {% endblock content %}
