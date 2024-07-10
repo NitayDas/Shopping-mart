@@ -9,7 +9,7 @@
           <div class="grid grid-cols-1 gap-12  lg:grid-cols-2 ">
 			
 			<div class="bg-slate-100 shadow-md rounded-md border p-4">
-				<form action="" id="form-wrapper">
+				<form action="" id="form">
 				 {% comment %} user info section {% endcomment %}
 				<div id="user-info" class="mt-4">
 					<hr>
@@ -41,14 +41,16 @@
 						<input class="form-control w-9/12 p-2 rounded-md" type="text" name="zip_code" placeholder="Zip code..">
 					</div>
 				</div>
+                <button id="form-button" type="submit" class="btn mb-4 text-white text-lg bg-gradient-to-r from-indigo-600 via-blue-600 to-blue-300 btn-block" >continue</button>
 			</form>
+
             {% comment %} payment option {% endcomment %}
 			<div class="box-element hidden" id="payment-info">
 				<small>Paypal Options</small>
 				<button class="btn btn-outline-dark" id="make-payment">Make payment</button>
 				<div id="paypal-button-container"></div>
 			</div>
-			<button id="form-button" class="btn mb-4 text-white text-lg bg-gradient-to-r from-indigo-600 via-blue-600 to-blue-300 btn-block" onclick="submitFormData()">confirm</button>
+			
 			</div>
 
 			
@@ -177,65 +179,15 @@
 	  </script>
 	  
 	  <script type="text/javascript">
-		  var shipping = '{{ order.shipping }}' === 'True';
-		  
-		  if (!shipping) {
-			  document.getElementById('shipping-info').innerHTML = '';
-		  }
-	  
-		  if (user !== 'AnonymousUser') {
-			  document.getElementById('user-info').innerHTML = '';
-		  }
-	  
-		  if (!shipping && user !== 'AnonymousUser') {
-			  document.getElementById('form-wrapper').classList.add("hidden");
-			  document.getElementById('payment-info').classList.remove("hidden");
-		  }
-	  
-		  function submitFormData() {
-			  var form = document.getElementById('form-wrapper');
-			  var userFormData = {
-				  'name': null,
-				  'email': null,
-				  'total': total,
-			  }
-	  
-			  var shippingInfo = {
-				  'address': null,
-				  'city': null,
-				  'state': null,
-				  'zipcode': null,
-			  }
-	          
-			  console.log(form.address.value);
-			  if (shipping) {
-				  shippingInfo.address = form.address.value;
-				  shippingInfo.city = form.city.value;
-				  shippingInfo.state = form.country.value;
-				  shippingInfo.zipcode = form.zip_code.value;
-			  }
-	  
-			  if (user === 'AnonymousUser') {
-				  userFormData.name = form.name.value;
-				  userFormData.email = form.email.value;
-			  }
-	  
-			  var url = "/process_order/"
-			  fetch(url, {
-				  method: 'POST',
-				  headers: {
-					  'Content-Type': 'application/json',
-					  'X-CSRFToken': csrftoken,
-				  },
-				  body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo }),
-			  })
-			  .then(response => response.json())
-			  .then(data => {
-				  alert('Transaction completed');
-				  cart = {};
-				  document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/";
-				  window.location.href = "{% url 'store' %}";
-			  });
-		  }
+		  var form = document.getElementById('form')
+          form.addEventListener('submit', function(e){
+            e.preventDefault()
+            console.log("form submitted..")
+            document.getElementById('form-button').classList.add('hidden')
+            document.getElementById('payment-info').classList.remove('hidden')
+
+          })
+
+          
 	  </script>
 	  {% endblock content %}

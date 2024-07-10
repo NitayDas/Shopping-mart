@@ -118,12 +118,19 @@ def updateItem(request):
 
 
 def checkout(request):
-    data = cartData(request)
+    
+    if request.user.is_authenticated:
+        data = cartData(request)
 
-    cartItems = data['cartItems']
-    order = data['order']
-    items = data['items']
-    min_priced_item = data['min_priced_item']
+        cartItems = data['cartItems']
+        order = data['order']
+        items = data['items']
+        # min_priced_item = data['min_priced_item']
+    
+    else:
+        items=[]
+        order = {'get_cart_total': 0, 'get_cart_items':0}
+        cartItems = order['get_cart_items']
    
 
     shipping_cost = int((cartItems + 4) / 5) * 5
