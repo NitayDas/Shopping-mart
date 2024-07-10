@@ -13,11 +13,15 @@ import json
 
 
 def store(request):
-    data = cartData(request)
-
-    cartItems = data['cartItems']
-    # order = data['order']
-    # items = data['items']
+    
+    if request.user.is_authenticated:
+        data = cartData(request)
+        cartItems = data['cartItems']
+       
+    else:
+        items=[]
+        order = {'get_cart_total': 0, 'get_cart_items':0}
+        cartItems = order['get_cart_items']
 
     products = Product.objects.all()
     
@@ -67,11 +71,18 @@ def signup(request):
  
  
 def cart(request):
-    data = cartData(request)
+    
+    if request.user.is_authenticated:
+        data = cartData(request)
 
-    cartItems = data['cartItems']
-    order = data['order']
-    items = data['items']
+        cartItems = data['cartItems']
+        order = data['order']
+        items = data['items']
+        
+    else:
+        items=[]
+        order = {'get_cart_total': 0, 'get_cart_items':0}
+        cartItems = order['get_cart_items']
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/cart.html', context)
@@ -104,3 +115,42 @@ def updateItem(request):
         orderItem.delete()
     
     return JsonResponse('Item was added', safe=False)
+
+
+def checkout(request):
+    data = cartData(request)
+
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+    min_priced_item = data['min_priced_item']
+   
+
+    shipping_cost = int((cartItems + 4) / 5) * 5
+    total_with_discount = None
+
+    if request.user.is_authenticated:
+        total = shipping_cost + order.get_cart_total
+        
+        total_with_discount = shipping_cost + order.with_discount_get_cart_total
+            
+    else:
+        total = shipping_cost + order['get_cart_total']
+        if order['get_discount_price']:
+            total_with_discount = shipping_cost + order['get_discount_price']
+            
+   
+            
+    print(total)
+    print(total_with_discount)
+
+    context = {
+        'items': items,
+        'order': order,
+        'cartItems': cartItems,
+        # 'min_priced_item': min_priced_item,
+        'shipping_cost': shipping_cost,
+        'total': total,
+        'total_with_discount': total_with_discount
+    }
+    return render(request, 'store/checkout.html', context)
