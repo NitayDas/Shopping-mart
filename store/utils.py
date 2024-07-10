@@ -47,22 +47,22 @@ def cookieCart(request):
     return {'cartItems': cartItems, 'order': order, 'items': items}
 
 
-# def cartData(request):
-#     if request.user.is_authenticated:
-#         customer = request.user.customer
-#         order, created = Order.objects.get_or_create(customer=customer, status='not_ordered')
-#         items = order.orderitem_set.all()
-#         cartItems = order.get_cart_items
-#         min_priced_item = min(items, key=lambda x: x.product.price) if items else None
+def cartData(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, status='not_ordered')
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
+        min_priced_item = min(items, key=lambda x: x.product.price) if items else None
         
-#     else:
-#         cookieData = cookieCart(request)
-#         cartItems = cookieData['cartItems']
-#         order = cookieData['order']
-#         items = cookieData['items']
-#         min_priced_item = min(items, key=lambda x: x['product']['price']) if items else None
+    else:
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
+        order = cookieData['order']
+        items = cookieData['items']
+        min_priced_item = min(items, key=lambda x: x['product']['price']) if items else None
 
-#     return {'cartItems': cartItems, 'order': order, 'items': items, 'min_priced_item': min_priced_item}
+    return {'cartItems': cartItems, 'order': order, 'items': items, 'min_priced_item': min_priced_item}
 
 
 # def guestOrder(request, data):

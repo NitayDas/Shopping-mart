@@ -9,14 +9,13 @@
             <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
             <script src="https://kit.fontawesome.com/13cb3564b0.js" crossorigin="anonymous"></script>
             <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
-            {% comment %} <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> {% endcomment %}
             <script src="https://cdn.tailwindcss.com"></script>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Glory:wght@500&display=swap" rel="stylesheet">
 
 
-            <script type="text/javascript">
+            <script type="text/javascript" >
 
             var user = '{{request.user}}'
 
@@ -37,7 +36,7 @@
             }
             var csrftoken = getToken('csrftoken')
 
-            function getCookie(name) {
+            {% comment %} function getCookie(name) {
                 // Split cookie string and get all individual name=value pairs in an array
                 var cookieArr = document.cookie.split(";");
 
@@ -63,7 +62,7 @@
                 console.log('Cart Created!', cart)
                 document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
             }
-            console.log('Cart:', cart)
+            console.log('Cart:', cart) {% endcomment %}
 
             </script>
      </head>
@@ -89,9 +88,9 @@
                                 <ul class="menu menu-horizontal px-1 font-semibold text-white">
                                     <li><button class="bg-red-500 text-white px-3 text-lg font-medium rounded-lg hover:bg-red-700" ><a href="{% url 'logout' %}" >Logout</a></button></li>
                                     {% if not user.is_superuser %}
-                                    {% comment %} <li><a href="{% url 'cart' %}">
+                                    <li><a href="{% url 'cart' %}">
                                         <img  id="cart-icon" src="{% static 'images/cart.png' %}"><h2 class="mb-2 " id="cart-total">{{cartItems}}</h2>
-                                    </a> {% endcomment %}
+                                        </a>
                                     </li>
                     
                                     <li><a class="text-green-400 ml-4  rounded-circle p-2" style="background-color:white">{{user.username}}</a></li>
@@ -133,6 +132,6 @@
 
 	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-      <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/cartitem.js' %}"></script>
      </body>
 </html>

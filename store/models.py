@@ -32,3 +32,108 @@ class Product(models.Model):
         except:
             url = ''
         return url
+    
+    
+class Order(models.Model):
+    
+    ORDER_STATUS_CHOICES = [
+        ('not_ordered', 'Not Ordered'),
+        ('complete', 'Complete'),
+        ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
+        ('returned', 'Returned'),
+    ]
+    
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    date_order = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='not_ordered')
+    # transaction_id = models.CharField(max_length=200, null=True)
+    refund_requested = models.BooleanField(null=True,default=False)
+    refund_granted = models.BooleanField(null=True,default=False)
+    
+
+    def __str__(self):
+        return str(self.id)
+    
+    @property
+    def shipping_cost(self):
+        return int((self.get_cart_items + 4) / 5) * 5
+
+    @property
+    def total_with_shipping(self):
+        return self.with_discount_get_cart_total + self.shipping_cost
+
+    @property
+    def shipping(self):
+        shipping = False
+        orderitems = self.orderitem_set.all()
+        for i in orderitems:
+            if i.product.digital == False:
+                shipping = True
+        print(shipping)
+        return shipping
+
+
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+
+    @property
+    def get_cart_items(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
+    
+    @property
+    def with_discount_get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.with_discount_get_total for item in orderitems])
+        return total
+            
+
+class OrderItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    free_items = models.IntegerField(default=0)
+    
+
+    @property
+    def get_total(self):
+        total = self.product.price * self.quantity
+        return total
+    
+    @property
+    def with_discount_get_total(self):
+        total=0.0
+        if self.product.discount_price:
+            total = self.product.discount_price * self.quantity
+        else:
+            total =self.product.price * self.quantity
+        return total
+    
+    
+    @property
+    def get_free_item_quantity(self):
+        if (
+            self.product.bulk_discount_threshold > 0
+            and self.quantity >= self.product.bulk_discount_threshold
+        ):
+            
+            return (
+                self.quantity // self.product.bulk_discount_threshold * 
+                self.product.bulk_discount_free_items
+            )
+             
+        else:
+            return 0
+        
+        
+    @property
+    def get_free_item(self):
+        if self.product.free_item_for:
+            return self.product.free_item_for
+        return None

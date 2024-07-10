@@ -17,7 +17,7 @@
           <div class="p-4 border border-gray-200 rounded-md shadow-md">
               <h6><strong>{{ product.name }}</strong></h6>
               <hr class="my-2">
-              <button data-product={{ product.id }} data-action="add" class="btn btn-outline-secondary add-btn update-cart bg-slate-200 hover:bg-slate-300 mr-2">Add to Cart</button>
+              <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart bg-slate-200 hover:bg-slate-300 mr-2">Add to Cart</button>
               <a class="btn btn-outline-primary bg-slate-200 hover:bg-slate-300" href="#">View</a>
               
               {% if product.discount %}
