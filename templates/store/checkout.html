@@ -152,7 +152,7 @@
 
 
 
-	  {% comment %} <script src="https://www.paypal.com/sdk/js?client-id=AX-VrJu4eVcZgosPFC05U3X6XhpsOyfGU-M3TmlAXB6f4Z6Di6VZIHzMseRlKX3dWyuKn8dFJzTvnnP4&currency=USD&disable-funding=credit"></script>
+	  <script src="https://www.paypal.com/sdk/js?client-id=AX-VrJu4eVcZgosPFC05U3X6XhpsOyfGU-M3TmlAXB6f4Z6Di6VZIHzMseRlKX3dWyuKn8dFJzTvnnP4&currency=USD&disable-funding=credit"></script>
 
 	  <script>
 		  var total = '{{ total_with_discount|default:total }}';
@@ -176,9 +176,15 @@
 				  });
 			  }
 		  }).render('#paypal-button-container');
-	  </script> {% endcomment %}
+	  </script>
 	  
 	  <script type="text/javascript">
+
+         if(user !== 'anonymousUser'){
+            document.getElementById('user-info').innerHTML = ''
+         }
+
+
 		  var form = document.getElementById('form');
           form.addEventListener('submit', function(e){
             e.preventDefault()
@@ -193,7 +199,55 @@
           });
 
           function submitFormData(){
-            console.log('payment button clicked');
+                console.log('payment button clicked');
+
+                var userFormData = {
+                    'name': null,
+                    'email': null,
+                    'total': total,
+                }
+        
+                var shippingInfo = {
+                    'address': null,
+                    'city': null,
+                    'country': null,
+                    'zip_code': null,
+                }
+                
+                console.log(form.address.value);
+
+                shippingInfo.address = form.address.value;
+                shippingInfo.city = form.city.value;
+                shippingInfo.country = form.country.value;
+                shippingInfo.zip_code = form.zip_code.value;
+
+
+
+                if (user === 'AnonymousUser') {
+                    userFormData.name = form.name.value;
+                    userFormData.email = form.email.value;
+                }
+
+                var url = "/process_order/"
+
+                fetch(url, {
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+
+                    body: JSON.stringify({'form' : userFormData, 'shipping': shippingInfo}),
+                })
+
+                .then(response => response.json())
+                .then(data =>{
+                    console.log('success:', data);
+                    cart = {};
+                    alert("Transaction Completed");
+                    window.location.href = "{% url 'store' %}"
+                });
+
           }
 
 

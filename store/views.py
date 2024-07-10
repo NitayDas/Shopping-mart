@@ -161,3 +161,9 @@ def checkout(request):
         'total_with_discount': total_with_discount
     }
     return render(request, 'store/checkout.html', context)
+
+
+def processOrder(request):
+    
+    print(request.body)
+    return JsonResponse("payment completed!", safe=False)
