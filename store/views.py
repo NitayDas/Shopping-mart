@@ -169,8 +169,8 @@ def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
     
-    if request.user.is_authenticaated:
-        customer = request.user.cutomer
+    if request.user.is_authenticated:
+        customer = request.user.customer
         order ,created = Order.objects.get_or_create(customer=customer,  status='not_ordered')
         total = data['form']['total']
         order.transaction_id = transaction_id
@@ -178,11 +178,56 @@ def processOrder(request):
     else:
         print("user in not logged in..")
         
-        
     shipping_cost = int((order.get_cart_items + 4) / 5) * 5
+    discount_total_with_shipping = shipping_cost + order.with_discount_get_cart_total
     total_with_shipping = shipping_cost + order.get_cart_total
     
-    print(total)
-    print(total_with_shipping)
+    if total == discount_total_with_shipping or total == total_with_shipping:
+        if order.status == 'not_ordered':
+            order.status = 'complete'
+            order.save() 
+            
+            order_items = order.orderitem_set.all()
+            
+            for item in order_items:
+                product = item.product
+                
+                free_item = item.get_free_item
+                free_item_quantity = item.get_free_item_quantity
+                
+                item.free_items = free_item_quantity
+                item.save()
+                
+                if product.quantity < item.quantity:
+                    return HttpResponse("Not available")
+                else:
+                    product.quantity -= item.quantity
+                    product.save()
+                    
+                if free_item:
+                    free_item.quantity -= free_item_quantity
+                    free_item.save()
+                    
+                    
+            response_message = 'Order confirmed.'
+            
+        else:
+            response_message = 'Order cannot be confirmed as it is already complete or delivered.'
+    else:
+        response_message = 'Order total does not match.'
+        
+    if order.status == 'complete':
+        ShippingAddress.objects.create(
+            customer=customer,
+            order=order,
+            address=data['shipping']['address'],
+            city=data['shipping']['city'],
+            state=data['shipping']['state'],
+            zipcode=data['shipping']['zipcode'],
+        )
 
+
+    # print(f"Order saved. Current status in DB: {Order.objects.get(id=order.id).status}")
+    
+    
     return JsonResponse("payment completed!", safe=False)
