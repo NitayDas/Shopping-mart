@@ -75,7 +75,6 @@ def cart(request):
     
     if request.user.is_authenticated:
         data = cartData(request)
-
         cartItems = data['cartItems']
         order = data['order']
         items = data['items']
