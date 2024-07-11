@@ -47,7 +47,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
     date_order = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='not_ordered')
-    # transaction_id = models.CharField(max_length=200, null=True)
+    transaction_id = models.CharField(max_length=200, null=True)
     refund_requested = models.BooleanField(null=True,default=False)
     refund_granted = models.BooleanField(null=True,default=False)
     

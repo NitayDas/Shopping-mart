@@ -10,6 +10,7 @@ from django.views.generic import ListView, DetailView, View
 from django.contrib import messages
 from .utils import cookieCart, cartData
 import json
+import datetime
 
 
 def store(request):
@@ -165,5 +166,23 @@ def checkout(request):
 
 def processOrder(request):
     
-    print(request.body)
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
+    
+    if request.user.is_authenticaated:
+        customer = request.user.cutomer
+        order ,created = Order.objects.get_or_create(customer=customer,  status='not_ordered')
+        total = data['form']['total']
+        order.transaction_id = transaction_id
+    
+    else:
+        print("user in not logged in..")
+        
+        
+    shipping_cost = int((order.get_cart_items + 4) / 5) * 5
+    total_with_shipping = shipping_cost + order.get_cart_total
+    
+    print(total)
+    print(total_with_shipping)
+
     return JsonResponse("payment completed!", safe=False)
