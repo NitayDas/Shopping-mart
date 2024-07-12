@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate,login as auth_login,logout
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
+from django.db.models import Q,F
 from django.views.generic import ListView, DetailView, View
 from django.contrib import messages
 from .utils import cookieCart, cartData
@@ -240,3 +240,26 @@ def order_info(request):
    
     context = {'orders': orders}
     return render(request, 'store/order_info.html', context)
+
+
+@login_required
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, customer=request.user.customer)
+    
+    if order.status == 'complete':
+        order.status = 'cancelled'
+        order.save()
+        order_items = order.orderitem_set.all()
+        for item in order_items:
+            Product.objects.filter(id=item.product.id).update(quantity=F('quantity') + item.quantity)
+            
+            free_item = item.get_free_item
+            free_item_quantity = item.get_free_item_quantity
+            if free_item:
+                free_item.quantity += free_item_quantity
+                free_item.save()
+            
+        return HttpResponse('Order cancelled.')
+        
+    else:
+        return HttpResponse('Order cannot be cancelled as it is delivered.')
