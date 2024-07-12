@@ -232,3 +232,11 @@ def processOrder(request):
         )
     
     return JsonResponse("payment completed!", safe=False)
+
+
+def order_info(request):
+    customer = request.user.customer
+    orders = Order.objects.filter(Q(customer=customer) & (Q(status='complete') | Q(status='delivered') | Q(status='cancelled'))).order_by('-date_order')
+   
+    context = {'orders': orders}
+    return render(request, 'store/order_info.html', context)
