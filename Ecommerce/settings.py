@@ -49,11 +49,11 @@ CORS_ALLOWED_ORIGINS = [
 
 
 # For handling CSRF with cross-origin requests
-CSRF_TRUSTED_ORIGINS = [
-    'https://mart.kapotakkho.online',
-    'https://www.mart.kapotakkho.online',
-    'http://127.0.0.1',
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://mart.kapotakkho.online',
+#     'https://www.mart.kapotakkho.online',
+#     'http://127.0.0.1',
+# ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
