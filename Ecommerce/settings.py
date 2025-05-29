@@ -24,13 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3_4+&7+vrs3(lo5$f2*6%)w5$0ks@6orfd3=mwnb_(w8+us*ad'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+ALLOWED_HOSTS = [ 'takebook.kapotakkho.online','86.48.3.219', '127.0.0.1']
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,6 +38,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store',
+]
+
+
+# CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    "https://mart.kapotakkho.online",
+    "http://mart.kapotakkho.online" 
+]
+
+
+# For handling CSRF with cross-origin requests
+CSRF_TRUSTED_ORIGINS = [
+    'https://mart.kapotakkho.online',
+    'https://www.mart.kapotakkho.online',
+    'http://127.0.0.1',
 ]
 
 MIDDLEWARE = [
