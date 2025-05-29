@@ -1,0 +1,25 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+ <header class="mt-12 p-8">
+    <div class=" w-9/12 mx-auto text-center">
+        <p class="text-xl font-semibold mb-8">Update Products</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="name" value="{{ product.name }}" placeholder="Enter product name" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" required>
+            <input type="number" name="price" value="{{ product.price }}" placeholder="Enter product price" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" step="0.01" required>
+            <input type="number" name="quantity" value="{{ product.quantity }}" placeholder="Enter product quantity" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" required>
+            <input type="number" name="discount" value="{{ product.discount }}" placeholder="Enter discount" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" step="0.01" required>
+            <input type="file" name="image" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12">
+            <label class=" block w-9/12 p-2">
+                <input type="checkbox" name="digital" class="mr-2"> Digital Product
+            </label>
+            <input id="form-button" class="btn mb-4 text-white text-lg bg-gradient-to-r from-indigo-600 via-blue-600 to-blue-300 btn-block w-9/12" type="submit" value="Update">
+        </form>
+     </div>
+    </header>
+
+{% endblock content %}
+

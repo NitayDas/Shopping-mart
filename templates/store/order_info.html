@@ -45,12 +45,12 @@
                 <p>{{ order.date_order }}</p>
                 <p>${{ order.total_with_shipping|floatformat:2 }}</p>
                 <div class="flex flex-col gap-2">
-                    {% comment %} <a href="{% url 'view_details' order.id %}"><button class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-amber-500 to-amber-400 hover:text-black">View Details</button></a> {% endcomment %}
+                    <a href="{% url 'view_details' order.id %}"><button class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-amber-500 to-amber-400 hover:text-black">View Details</button></a>
                     {% if order.status == 'complete' %}
-                   <button class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black" onclick="cancelOrder({{ order.id }})">cancel order</button>
-                    {% comment %} {% endif %}
+                    <a href="{% url 'cancel_order' order.id %}"><button class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black">cancel order</button></a>
+                    {% endif %}
                     {% if order.status == 'delivered' and not order.refund_requested %}
-                    <a href="{% url 'request-refund' order.id %}"><button class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black">Return order</button></a> {% endcomment %}
+                    <a href="{% url 'request-refund' order.id %}"><button class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black">Return order</button></a>
                     {% endif %}
                    
                 </div> 
@@ -63,26 +63,4 @@
 	   </div>
 
     </header>
-
-    <script>
-        function cancelOrder(orderId) {
-            fetch(`/cancel_order/${orderId}/`, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.text())
-            .then(data => {
-                if (data === 'Order cancelled.') {
-                    alert(data);
-                    location.reload(); // Reload the page to show the updated status
-                } else {
-                    alert(data);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
 {% endblock content %}

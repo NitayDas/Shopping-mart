@@ -9,13 +9,14 @@
             <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
             <script src="https://kit.fontawesome.com/13cb3564b0.js" crossorigin="anonymous"></script>
             <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
+            {% comment %} <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> {% endcomment %}
             <script src="https://cdn.tailwindcss.com"></script>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Glory:wght@500&display=swap" rel="stylesheet">
 
 
-            <script type="text/javascript" >
+            <script type="text/javascript">
 
             var user = '{{request.user}}'
 
@@ -36,7 +37,7 @@
             }
             var csrftoken = getToken('csrftoken')
 
-            {% comment %} function getCookie(name) {
+            function getCookie(name) {
                 // Split cookie string and get all individual name=value pairs in an array
                 var cookieArr = document.cookie.split(";");
 
@@ -62,7 +63,7 @@
                 console.log('Cart Created!', cart)
                 document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
             }
-            console.log('Cart:', cart) {% endcomment %}
+            console.log('Cart:', cart)
 
             </script>
      </head>
@@ -73,14 +74,14 @@
                             <div class="flex-1 text-white">
                               <a class="btn btn-ghost text-2xl px-8 "><span class="text-sky-500">Shopping</span> mart</a>
                               {% if user.is_superuser %}
-                              {% comment %} <a class="text-xl inline-grid" href="{% url 'admin_view' %}">Admin Dashboard</a> {% endcomment %}
+                              <a class="text-xl inline-grid ml-8" href="{% url 'admin_view' %}">Admin Dashboard</a>
                               
                               {% else %}
-                              <a href="{% url 'store' %}" class="text-xl inline-grid">store</a>
+                              <a href="{% url 'store' %}" class="text-xl ml-8 inline-grid">Store</a>
                               <a href="{% url 'order_info' %}" class="ml-16 text-xl inline-grid">Track Order</a>
                               {% endif %}
 
-                              {% comment %} <a href="{% url 'refund_lists' %}" class="text-xl inline-grid ml-16">Refund requests</a> {% endcomment %}
+                              <a href="{% url 'refund_lists' %}" class="text-xl inline-grid ml-16">Refund requests</a>
                             </div>
                              
                             {% if user.is_authenticated %}
@@ -90,7 +91,7 @@
                                     {% if not user.is_superuser %}
                                     <li><a href="{% url 'cart' %}">
                                         <img  id="cart-icon" src="{% static 'images/cart.png' %}"><h2 class="mb-2 " id="cart-total">{{cartItems}}</h2>
-                                        </a>
+                                    </a>
                                     </li>
                     
                                     <li><a class="text-green-400 ml-4  rounded-circle p-2" style="background-color:white">{{user.username}}</a></li>
@@ -102,12 +103,12 @@
 
                             <div class="navbar-left flex">
                               <ul class="menu menu-horizontal px-4 font-semibold text-white">
-                                <li><button class=" bg-sky-400 text-white px-3 text-lg font-medium rounded-lg hover:bg-sky-500" style ><a href="{% url 'login' %}" >Login</a></button></li>
-                                  {% comment %} <li ><a href="{% url 'cart' %}"><img  id="cart-icon" src="{% static 'images/cart.png' %}"> </a>
+                                <li><a href="{% url 'login' %}" class=" bg-sky-400 text-white px-3 text-base font-medium rounded-lg hover:bg-sky-500"><button>Login</button></a></li>
+                                  <li ><a href="{% url 'cart' %}"><img  id="cart-icon" src="{% static 'images/cart.png' %}"> </a>
                                    
                                    </li>
                                    <p id="cart-total">{{cartItems}}</p>
-                                    {% endcomment %}
+                                   
                                </ul>
                             </div>
                             {% endif %}
@@ -115,7 +116,7 @@
                         </div>
                 </nav>
 
-         <div class="container">
+         <div class="text-center px-8">
                 <br>
                 {% block content %}
 
@@ -132,6 +133,6 @@
 
 	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-      <script type="text/javascript" src="{% static 'js/cartitem.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
      </body>
 </html>

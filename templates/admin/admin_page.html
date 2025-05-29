@@ -1,0 +1,51 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+ <header class="mt-12 p-8">
+  <div class="flex flex-col md:flex-row lg:flex-row">
+    <div class="container mx-auto">
+        <p class="text-xl ml-60 font-semibold mb-8">Add Products</p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Enter product name" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" required>
+            <input type="number" name="price" placeholder="Enter product price" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" step="0.01" required>
+            <input type="number" name="quantity" placeholder="Enter product quantity" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" required>
+            <input type="number" name="discount" placeholder="Enter discount" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" step="0.01" required>
+            <label class="block w-9/12 p-2">
+                <input type="checkbox" name="digital" class="mr-2"> Digital Product
+            </label>
+            <input type="file" name="image" class="p-2 bg-slate-100 mb-3 border rounded-md w-9/12" required>
+            <input id="form-button" class="btn mb-4 text-white text-lg bg-gradient-to-r from-indigo-600 via-blue-600 to-blue-300 btn-block w-9/12" type="submit" value="Add">
+        </form>
+     </div>
+    <div class="bg-slate-100 border shadow-lg p-4 mr-4 w-full ">
+        <h1 class="text-lg font-bold mb-8 text-center mt-4 text-black">Products</h1>
+        <div class="grid grid-cols-7 gap-1 text-lg font-semibold mb-4 ">
+            <h2></h2>
+			<h2 class=" text-black">Product</h2>
+			<h2 class=" text-black">Price</h2>
+			<h2 class=" text-black">Quantity</h2>
+			<h2 class=" text-black">discount</h2>
+            <h2 class=" text-black">Update</h2>
+            <h2 class=" text-black">Delete</h2>
+		</div>
+
+		{% for product in products %}
+		<hr class="my-2">
+		<div class="grid grid-cols-7 gap-1 text-[16px] mb-2">
+			<div><img class="row-image" src="{{product.imageURL}}"></div>
+			<div><p>{{product.name}}</p></div>
+			<div><p>${{product.price|floatformat:2}}</p></div>
+            <div><p>{{product.quantity}}</p></div>
+			<div><p class="discount">{{product.discount}}%</p></div>
+            <div><a href="{% url 'update_product' product.id %}"><button class=" text-white text-sm p-2 rounded-sm bg-gradient-to-r from-amber-600 to-amber-500 ">update</button></a></div>
+            <div><a href="{% url 'delete_product' product.id %}"><button class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 ">delete</button></a></div>
+		</div>
+		{% endfor %}
+         <hr>
+	   </div>
+  </div>
+ </header>
+{% endblock content %}

@@ -1,0 +1,86 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    
+<header class="mt-12">
+
+            <div class="col-md-3">
+                    {% if messages %}
+                    <div class="messages text-center" style="background-color:#333">
+                    {% for message in messages %}
+                        <h3 style="color:green">{{ message }}</h3>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            </div> 
+
+                <div class="w-full max-w-md mx-auto bg-white shadow-xl rounded-xl p-8 mt-10">
+                <form action="" method="post" class="space-y-2">{% csrf_token %}
+                    <h2 class="text-2xl font-semibold text-center text-gray-800 mb-4">Sign Up Here</h2>
+                    <div>
+                    <label for="username" class="block text-gray-700 font-medium mb-1">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        required
+                        placeholder="Enter your username"
+                        class="w-full border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg px-4 py-2 transition-all outline-none"
+                    />
+                    </div>
+
+                    <div>
+                    <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        placeholder="Enter your email"
+                        class="w-full border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg px-4 py-2 transition-all outline-none"
+                    />
+                    </div>
+
+                    <div>
+                    <label for="password1" class="block text-gray-700 font-medium mb-1">Password</label>
+                    <input
+                        type="password"
+                        id="password1"
+                        name="password1"
+                        required
+                        placeholder="Create a password"
+                        class="w-full border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg px-4 py-2 transition-all outline-none"
+                    />
+                    </div>
+
+                    <div>
+                    <label for="password2" class="block text-gray-700 font-medium mb-1">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="password2"
+                        name="password2"
+                        required
+                        placeholder="Confirm password"
+                        class="w-full border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg px-4 py-2 transition-all outline-none"
+                    />
+                    </div>
+
+                    <button
+                    type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded-lg transition-all"
+                    >
+                    Sign up
+                    </button>
+                </form>
+
+                <div class="text-center mt-6">
+                    <p class="text-sm text-gray-600">
+                    Already have an account?
+                    <a href="{% url 'login' %}" class="text-indigo-600 hover:underline">Log in</a>
+                    </p>
+                </div>
+            </div>
+
+        </header>
+
+{% endblock content %}
