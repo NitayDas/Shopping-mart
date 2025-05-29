@@ -1,138 +1,210 @@
 <!DOCTYPE html>
 {% load static %}
 <html>
-    <head>
-           <title>e-Commerce | Modern Basics, Radical Transparency</title>
+  <head>
+    <title>e-Commerce | Modern Basics, Radical Transparency</title>
 
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
-            <link rel="shortcut icon" type="images" href="{% static 'images/icon.ico' %}">
-            <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-            <script src="https://kit.fontawesome.com/13cb3564b0.js" crossorigin="anonymous"></script>
-            <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
-            {% comment %} <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> {% endcomment %}
-            <script src="https://cdn.tailwindcss.com"></script>
-            <link rel="preconnect" href="https://fonts.googleapis.com">
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Glory:wght@500&display=swap" rel="stylesheet">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"
+    />
+    <link
+      rel="shortcut icon"
+      type="images"
+      href="{% static 'images/icon.ico' %}"
+    />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+    <script
+      src="https://kit.fontawesome.com/13cb3564b0.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    {% comment %}
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    {% endcomment %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Glory:wght@500&display=swap"
+      rel="stylesheet"
+    />
 
+    <script type="text/javascript">
+      var user = "{{request.user}}";
 
-            <script type="text/javascript">
-
-            var user = '{{request.user}}'
-
-            function getToken(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = cookies[i].trim();
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
+      function getToken(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          var cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
             }
-            var csrftoken = getToken('csrftoken')
+          }
+        }
+        return cookieValue;
+      }
+      var csrftoken = getToken("csrftoken");
 
-            function getCookie(name) {
-                // Split cookie string and get all individual name=value pairs in an array
-                var cookieArr = document.cookie.split(";");
+      function getCookie(name) {
+        // Split cookie string and get all individual name=value pairs in an array
+        var cookieArr = document.cookie.split(";");
 
-                // Loop through the array elements
-                for(var i = 0; i < cookieArr.length; i++) {
-                    var cookiePair = cookieArr[i].split("=");
+        // Loop through the array elements
+        for (var i = 0; i < cookieArr.length; i++) {
+          var cookiePair = cookieArr[i].split("=");
 
-                    /* Removing whitespace at the beginning of the cookie name
+          /* Removing whitespace at the beginning of the cookie name
                     and compare it with the given string */
-                    if(name == cookiePair[0].trim()) {
-                        // Decode the cookie value and return
-                        return decodeURIComponent(cookiePair[1]);
-                    }
-                }
+          if (name == cookiePair[0].trim()) {
+            // Decode the cookie value and return
+            return decodeURIComponent(cookiePair[1]);
+          }
+        }
 
-                // Return null if not found
-                return null;
-            }
-		    var cart = JSON.parse(getCookie('cart'))
+        // Return null if not found
+        return null;
+      }
+      var cart = JSON.parse(getCookie("cart"));
 
-            if (cart == undefined){
-                cart = {}
-                console.log('Cart Created!', cart)
-                document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
-            }
-            console.log('Cart:', cart)
+      if (cart == undefined) {
+        cart = {};
+        console.log("Cart Created!", cart);
+        document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
+      }
+      console.log("Cart:", cart);
+    </script>
+  </head>
+  <body style="font-family: Glory, sans-serif">
+    <nav>
+      <div class="navbar bg-slate-600">
+        <div class="flex-1 text-white">
+          <a class="btn btn-ghost text-2xl px-8"
+            ><span class="text-sky-500">Shopping</span> mart</a
+          >
+          {% if user.is_superuser %}
+          <a class="text-xl inline-grid ml-8" href="{% url 'admin_view' %}"
+            >Admin Dashboard</a
+          >
 
-            </script>
-     </head>
-     <body style="font-family:Glory, sans-serif;">
+          {% else %}
+          <a href="{% url 'store' %}" class="text-xl ml-8 inline-grid">Store</a>
+          {% if user.is_authenticated %}
+          <a href="{% url 'order_info' %}" class="ml-16 text-xl inline-grid"
+            >Track Order</a
+          >
+          {% endif %} {% endif %} {% if user.is_authenticated %}
+          <a href="{% url 'refund_lists' %}" class="text-xl inline-grid ml-16"
+            >Refund requests</a
+          >
+          {% endif %}
+        </div>
 
-                <nav>
-                        <div class="navbar bg-slate-600">
-                            <div class="flex-1 text-white">
-                              <a class="btn btn-ghost text-2xl px-8 "><span class="text-sky-500">Shopping</span> mart</a>
-                              {% if user.is_superuser %}
-                              <a class="text-xl inline-grid ml-8" href="{% url 'admin_view' %}">Admin Dashboard</a>
-                              
-                              {% else %}
-                              <a href="{% url 'store' %}" class="text-xl ml-8 inline-grid">Store</a>
-                              <a href="{% url 'order_info' %}" class="ml-16 text-xl inline-grid">Track Order</a>
-                              {% endif %}
+        {% if user.is_authenticated %}
+        <div class="navbar-left flex">
+          <ul class="menu menu-horizontal px-1 font-semibold text-white">
+            <li>
+              <button
+                class="bg-red-500 text-white px-3 text-lg font-medium rounded-lg hover:bg-red-700"
+              >
+                <a href="{% url 'logout' %}">Logout</a>
+              </button>
+            </li>
+            {% if not user.is_superuser %}
+            <li>
+              <a href="{% url 'cart' %}">
+                <img id="cart-icon" src="{% static 'images/cart.png' %}" />
+                <h2 class="mb-2" id="cart-total">{{cartItems}}</h2>
+              </a>
+            </li>
 
-                              <a href="{% url 'refund_lists' %}" class="text-xl inline-grid ml-16">Refund requests</a>
-                            </div>
-                             
-                            {% if user.is_authenticated %}
-                            <div class="navbar-left flex">
-                                <ul class="menu menu-horizontal px-1 font-semibold text-white">
-                                    <li><button class="bg-red-500 text-white px-3 text-lg font-medium rounded-lg hover:bg-red-700" ><a href="{% url 'logout' %}" >Logout</a></button></li>
-                                    {% if not user.is_superuser %}
-                                    <li><a href="{% url 'cart' %}">
-                                        <img  id="cart-icon" src="{% static 'images/cart.png' %}"><h2 class="mb-2 " id="cart-total">{{cartItems}}</h2>
-                                    </a>
-                                    </li>
-                    
-                                    <li><a class="text-green-400 ml-4  rounded-circle p-2" style="background-color:white">{{user.username}}</a></li>
-                                    {% endif %}
-                                </ul>
-                            </div>
+            <li>
+              <a
+                class="text-green-400 ml-4 rounded-circle p-2"
+                style="background-color: white"
+                >{{user.username}}</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </div>
 
-                            {% else %}
+        {% else %}
 
-                            <div class="navbar-left flex">
-                              <ul class="menu menu-horizontal px-4 font-semibold text-white">
-                                <li><a href="{% url 'login' %}" class=" bg-sky-400 text-white px-3 text-base font-medium rounded-lg hover:bg-sky-500"><button>Login</button></a></li>
-                                  <li ><a href="{% url 'cart' %}"><img  id="cart-icon" src="{% static 'images/cart.png' %}"> </a>
-                                   
-                                   </li>
-                                   <p id="cart-total">{{cartItems}}</p>
-                                   
-                               </ul>
-                            </div>
-                            {% endif %}
-                            
-                        </div>
-                </nav>
+        <div class="navbar-left flex">
+          <ul class="menu menu-horizontal px-4 font-semibold text-white">
+            <li>
+              <a
+                href="{% url 'login' %}"
+                class="bg-sky-400 text-white px-3 text-base font-medium rounded-lg hover:bg-sky-500"
+                ><button>Login</button></a
+              >
+            </li>
+            <li>
+              <a href="{% url 'cart' %}"
+                ><img id="cart-icon" src="{% static 'images/cart.png' %}" />
+              </a>
+            </li>
+            <p id="cart-total">{{cartItems}}</p>
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+    </nav>
 
-         <div class="text-center px-8">
-                <br>
-                {% block content %}
+    <div class="text-center px-8">
+      <br />
+      {% block content %} {% endblock content %}
+      <br />
+    </div>
 
+    {% comment %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <span
+        style="
+          font-family: 'Glory', sans-serif;
+          color: black;
+          margin-top: 2%;
+          margin-left: 540px;
+        "
+      >
+      </span>
+    </nav>
+    {% endcomment %}
 
-                 {% endblock content %}
-                <br>
-         </div>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
 
-      {% comment %} <nav class="navbar navbar-expand-lg navbar-light bg-light"><span style="font-family: 'Glory', sans-serif; color: black; margin-top: 2%; margin-left: 540px;">  </span></nav> {% endcomment %}
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
 
-      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
 
-	    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-
-	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-      <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
-     </body>
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+  </body>
 </html>

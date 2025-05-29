@@ -1,80 +1,155 @@
-{% extends 'store/main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'store/main.html' %} {% load static %} {% block content %}
 
 <div class="container mx-auto px-4 py-8 font-sans">
-    <h1 class="text-2xl font-bold mb-4">Refund Requests</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {% for refund_request in refund_requests %}
-        <div class="bg-white shadow-md rounded-md p-4">
-            <div class="flex justify-between items-center mb-2">
-                <span > <span class="font-bold mr-2">Order id:</span>{{ refund_request.order }}</span>
-                <span class="text-sm text-gray-500">{{ refund_request.date_requested|date:"F d, Y" }}</span>
-            </div>
-            <a href="{% url 'view_details' refund_request.order.id %}"><button class="text-slate-1000 text-md my-2 rounded-sm hover:text-slate-500">View order details-></button></a>
-            <p><span  class="font-semibold mr-2">Customer:</span >{{ refund_request.order.customer.name }}</p>
-            <p class="mb-2 "><span class="mr-2 font-semibold">Reason:</span>{{ refund_request.reason }}</p>
-            <p class="mb-2 "><span class="mr-2 font-semibold">Refund amount:</span>{{ refund_request.order.with_discount_get_cart_total|floatformat:2 }}</p>
-            <p><span class="font-semibold mr-2">current staus:</span> {{refund_request.status}}</p><br>
-            <div class="flex items-center gap-4">
-                {% if user_is_admin %}
-                {% if refund_request.status == 'approved' %}
-                <a href="{% url 'approve_request' refund_request.id %}"><button class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-green-500 to-green-400 hover:text-black" disabled>Approve</button></a>
-                {% else %}
-                <a href="{% url 'approve_request' refund_request.id %}"><button class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-green-500 to-green-400 hover:text-black">Approve</button></a>
-                {% endif %}
-                <a href=""><button class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black">Reject</button></a>  
-                {% endif %} 
-            </div>
-        </div>
-        {% endfor %}
-
-        {% for item_refund_request in item_refund_requests %}
-            <div class="bg-white shadow-md rounded-md p-4">
-                <div class="flex justify-between items-center mb-2">
-                    <span > <span class="font-bold mr-2">Order id:</span>{{ item_refund_request.order }}</span>
-                    <span class="text-sm text-gray-500">{{ item_refund_request.date_requested|date:"F d, Y" }}</span>
-                </div>
-                <p><span  class="font-semibold mr-2">Customer:</span >{{ item_refund_request.order.customer.name }}</p>
-                <p><span class="font-semibold mr-2">Product:</span>{{ item_refund_request.item.name }}</p>
-                <p><span class="font-semibold mr-2">quantity:</span>{{ item_refund_request.quantity }}</p>
-                <p class="mb-2 "><span class="mr-2 font-semibold">Refund amount:</span>{{ item_refund_request.refund_amount|floatformat:2 }}</p>
-                <p class="mb-2 "><span class="mr-2 font-semibold">Reason:</span>{{ item_refund_request.reason }}</p>
-                <p><span class="font-semibold mr-2">current staus:</span> {{item_refund_request.status}}</p><br>
-                <div class="flex items-center gap-4">
-                    {% if user_is_admin %}
-                    {% if item_refund_request.status == 'approved' %}
-                    <a href="{% url 'item_approve_request' item_refund_request.id %}"><button class="text-white read-only text-md p-2 rounded-sm bg-gradient-to-r from-green-500 to-green-400 hover:text-black " disabled>Approve</button></a>
-                    {% else %}
-                    <a href="{% url 'item_approve_request' item_refund_request.id %}"><button class="text-white text-md p-2  rounded-sm bg-gradient-to-r from-green-500 to-green-400 hover:text-black">Approve</button></a>
-                    {% endif %}
-                    <a href=""><button class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black">Reject</button></a>
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
+  <h1 class="text-2xl font-bold mb-4">Refund Requests</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for refund_request in refund_requests %}
+    <div class="bg-white shadow-md rounded-md p-4">
+      <div class="flex justify-between items-center mb-2">
+        <span>
+          <span class="font-bold mr-2">Order id:</span>{{ refund_request.order
+          }}</span
+        >
+        <span class="text-sm text-gray-500"
+          >{{ refund_request.date_requested|date:"F d, Y" }}</span
+        >
+      </div>
+      <a href="{% url 'view_details' refund_request.order.id %}"
+        ><button
+          class="text-slate-1000 text-md my-2 rounded-sm hover:text-slate-500"
+        >
+          View order details->
+        </button></a
+      >
+      <p>
+        <span class="font-semibold mr-2">Customer:</span>{{
+        refund_request.order.customer.name }}
+      </p>
+      <p class="mb-2">
+        <span class="mr-2 font-semibold">Reason:</span>{{ refund_request.reason
+        }}
+      </p>
+      <p class="mb-2">
+        <span class="mr-2 font-semibold">Refund amount:</span>{{
+        refund_request.order.with_discount_get_cart_total|floatformat:2 }}
+      </p>
+      <p>
+        <span class="font-semibold mr-2">current staus:</span>
+        {{refund_request.status}}
+      </p>
+      <br />
+      <div class="flex items-center gap-4">
+        {% if user_is_admin %} {% if refund_request.status == 'approved' %}
+        <a href="{% url 'approve_request' refund_request.id %}"
+          ><button
+            class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-green-500 to-green-400 hover:text-black"
+            disabled
+          >
+            Approve
+          </button></a
+        >
+        {% else %}
+        <a href="{% url 'approve_request' refund_request.id %}"
+          ><button
+            class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-green-500 to-green-400 hover:text-black"
+          >
+            Approve
+          </button></a
+        >
+        {% endif %}
+        <a href=""
+          ><button
+            class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black"
+          >
+            Reject
+          </button></a
+        >
+        {% endif %}
+      </div>
     </div>
+    {% endfor %} {% for item_refund_request in item_refund_requests %}
+    <div class="bg-white shadow-md rounded-md p-4">
+      <div class="flex justify-between items-center mb-2">
+        <span>
+          <span class="font-bold mr-2">Order id:</span>{{
+          item_refund_request.order }}</span
+        >
+        <span class="text-sm text-gray-500"
+          >{{ item_refund_request.date_requested|date:"F d, Y" }}</span
+        >
+      </div>
+      <p>
+        <span class="font-semibold mr-2">Customer:</span>{{
+        item_refund_request.order.customer.name }}
+      </p>
+      <p>
+        <span class="font-semibold mr-2">Product:</span>{{
+        item_refund_request.item.name }}
+      </p>
+      <p>
+        <span class="font-semibold mr-2">quantity:</span>{{
+        item_refund_request.quantity }}
+      </p>
+      <p class="mb-2">
+        <span class="mr-2 font-semibold">Refund amount:</span>{{
+        item_refund_request.refund_amount|floatformat:2 }}
+      </p>
+      <p class="mb-2">
+        <span class="mr-2 font-semibold">Reason:</span>{{
+        item_refund_request.reason }}
+      </p>
+      <p>
+        <span class="font-semibold mr-2">current staus:</span>
+        {{item_refund_request.status}}
+      </p>
+      <br />
+      <div class="flex items-center gap-4">
+        {% if user_is_admin %} {% if item_refund_request.status == 'approved' %}
+        <a href="{% url 'item_approve_request' item_refund_request.id %}"
+          ><button
+            class="text-white read-only text-md p-2 rounded-sm bg-gradient-to-r from-green-500 to-green-400 hover:text-black"
+            disabled
+          >
+            Approve
+          </button></a
+        >
+        {% else %}
+        <a href="{% url 'item_approve_request' item_refund_request.id %}"
+          ><button
+            class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-green-500 to-green-400 hover:text-black"
+          >
+            Approve
+          </button></a
+        >
+        {% endif %}
+        <a href=""
+          ><button
+            class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black"
+          >
+            Reject
+          </button></a
+        >
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const selectElement = document.getElementById("statusSelect");
-    
-        selectElement.addEventListener('change', function() {
-    
-            const refundId = this.dataset.refundId;
-            console.log(refundId)
-            
-            const selectedStatus = this.value;
-            
-            location.reload(); // You can replace this with your logic to update the refund status
-        });
-    });
-    
-   
-    
-</script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const selectElement = document.getElementById("statusSelect");
 
+    selectElement.addEventListener("change", function () {
+      const refundId = this.dataset.refundId;
+      console.log(refundId);
+
+      const selectedStatus = this.value;
+
+      location.reload(); // You can replace this with your logic to update the refund status
+    });
+  });
+</script>
 
 {% endblock content %}

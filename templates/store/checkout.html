@@ -1,275 +1,328 @@
-{% extends 'store/main.html' %}
-{% load static %}
-{% block content %}
-     
+{% extends 'store/main.html' %} {% load static %} {% block content %} {% comment
+%} Tailwind design {% endcomment %}
 
-	{% comment %} Tailwind design {% endcomment %}
+<header class="mt-12 ml-12">
+  <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
+    <div class="bg-slate-100 shadow-md rounded-md border p-4">
+      <form action="" id="form-wrapper">
+        {% comment %} user info section {% endcomment %}
+        <div id="user-info" class="mt-4">
+          <hr />
+          <p class="text-lg font-semibold">User Information:</p>
+          <hr />
+          <div class="mt-4">
+            <input
+              required
+              class="form-control w-9/12 p-2 rounded-md"
+              type="text"
+              name="name"
+              placeholder="Name.."
+            />
+          </div>
+          <div class="mt-4 mb-4">
+            <input
+              required
+              class="form-control w-9/12 p-2 rounded-md"
+              type="email"
+              name="email"
+              placeholder="Email.."
+            />
+          </div>
+        </div>
 
-       <header class="mt-12 ml-12">
-          <div class="grid grid-cols-1 gap-12  lg:grid-cols-2 ">
-			
-			<div class="bg-slate-100 shadow-md rounded-md border p-4">
-				<form action="" id="form-wrapper">
-				 {% comment %} user info section {% endcomment %}
-				<div id="user-info" class="mt-4">
-					<hr>
-					<p class=" text-lg font-semibold">User Information:</p>
-					<hr>
-					<div class=" mt-4">
-						<input required class="form-control w-9/12 p-2 rounded-md" type="text" name="name" placeholder="Name..">
-					</div>
-					<div class=" mt-4 mb-4">
-						<input required class="form-control w-9/12 p-2 rounded-md" type="email" name="email" placeholder="Email..">
-					</div>
-				</div>
+        {% comment %} shipping info section {% endcomment %}
+        <div id="shipping-info" class="mt-4">
+          <hr />
+          <p class="text-lg font-semibold">Shipping Information:</p>
+          <hr />
+          <div class="mt-4">
+            <input
+              class="w-9/12 p-2 rounded-md"
+              type="text"
+              name="address"
+              placeholder="Address.."
+            />
+          </div>
+          <div class="mt-4">
+            <input
+              class="form-control w-9/12 p-2 rounded-md"
+              type="text"
+              name="city"
+              placeholder="City.."
+            />
+          </div>
+          <div class="mt-4">
+            <input
+              class="form-control w-9/12 p-2 rounded-md"
+              type="text"
+              name="country"
+              placeholder="Country.."
+            />
+          </div>
+          <div class="mt-4 mb-8">
+            <input
+              class="form-control w-9/12 p-2 rounded-md"
+              type="text"
+              name="zip_code"
+              placeholder="Zip code.."
+            />
+          </div>
+        </div>
+      </form>
+      {% comment %} payment option {% endcomment %}
+      <div class="box-element hidden" id="payment-info">
+        <small>Paypal Options</small>
+        <button class="btn btn-outline-dark" id="make-payment">
+          Make payment
+        </button>
+        <div id="paypal-button-container"></div>
+      </div>
+      <button
+        id="form-button"
+        class="btn mb-4 text-white text-lg bg-gradient-to-r from-indigo-600 via-blue-600 to-blue-300 btn-block"
+        onclick="submitFormData()"
+      >
+        confirm
+      </button>
+    </div>
 
-				{% comment %} shipping info section {% endcomment %}
-				<div id="shipping-info" class="mt-4">
-					<hr>
-					<p class="text-lg font-semibold">Shipping Information:</p>
-					<hr>
-					<div class="mt-4 ">
-						<input class="w-9/12 p-2 rounded-md" type="text" name="address" placeholder="Address..">
-					</div>
-					<div class="mt-4">
-						<input class="form-control w-9/12 p-2 rounded-md" type="text" name="city" placeholder="City..">
-					</div>
-					<div class="mt-4">
-						<input class="form-control w-9/12 p-2 rounded-md" type="text" name="country" placeholder="Country..">
-					</div>
-					<div class="mt-4 mb-8">
-						<input class="form-control w-9/12 p-2 rounded-md" type="text" name="zip_code" placeholder="Zip code..">
-					</div>
-				</div>
-			</form>
-            {% comment %} payment option {% endcomment %}
-			<div class="box-element hidden" id="payment-info">
-				<small>Paypal Options</small>
-				<button class="btn btn-outline-dark" id="make-payment">Make payment</button>
-				<div id="paypal-button-container"></div>
-			</div>
-			<button id="form-button" class="btn mb-4 text-white text-lg bg-gradient-to-r from-indigo-600 via-blue-600 to-blue-300 btn-block" onclick="submitFormData()">confirm</button>
-			</div>
+    <div class="bg-slate-100 shadow-md rounded-md border p-4">
+      <a class="btn btn-outline mb-2" href="{% url 'cart' %}"
+        >&#x2190; Back to Cart</a
+      >
+      <hr />
+      <div class="grid grid-cols-5 gap-2 text-lg font-semibold mb-4 mt-8">
+        <h2></h2>
+        <h2 class="text-black">Product</h2>
+        <h2 class="text-black">Price</h2>
+        <h2 class="text-black">Quantity</h2>
+        <h2 class="text-black">Total Price</h2>
+      </div>
 
-			
+      {% for item in items %}
+      <hr />
+      <div class="grid grid-cols-5 gap-2 text-[16px] mb-2">
+        <div><img class="row-image" src="{{item.product.imageURL}}" /></div>
+        <div><p>{{item.product.name}}</p></div>
+        {% if item.product.discount %}
+        <div>
+          <del>${{item.product.price|floatformat:2}}</del>
+          <p>${{item.product.discount_price|floatformat:2}}</p>
+        </div>
+        {% else %}
+        <div>
+          <p>${{item.product.price|floatformat:2}}</p>
+        </div>
+        {% endif %}
+        <div>
+          <p class="quantity">{{item.quantity}}</p>
+          <div class="quantity">
+            <img
+              data-product="{{item.product.id}}"
+              data-action="add"
+              class="chg-quantity update-cart"
+              src="{% static  'images/arrow-up.png' %}"
+            />
 
+            <img
+              data-product="{{item.product.id}}"
+              data-action="remove"
+              class="chg-quantity update-cart"
+              src="{% static  'images/arrow-down.png' %}"
+            />
+          </div>
+        </div>
+        {% if item.product.discount %}
+        <div>
+          <del>${{item.get_total|floatformat:2}}</del>
+          <p>${{item.with_discount_get_total|floatformat:2}}</p>
+        </div>
+        {% else %}
+        <div>
+          <p>${{item.get_total|floatformat:2}}</p>
+        </div>
+        {% endif %}
+      </div>
 
-			<div class="bg-slate-100 shadow-md rounded-md border p-4">
-				  <a class="btn btn-outline  mb-2" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
-				  <hr>
-					<div class="grid grid-cols-5 gap-2 text-lg font-semibold mb-4 mt-8 ">
-						<h2></h2>
-						<h2 class=" text-black">Product</h2>
-						<h2 class=" text-black">Price</h2>
-						<h2 class=" text-black">Quantity</h2>
-						<h2 class=" text-black">Total Price</h2>
-					</div>
-			
-					{% for item in items %}
-					<hr>
-					<div class="grid grid-cols-5 gap-2 text-[16px] mb-2">
-						<div><img class="row-image" src="{{item.product.imageURL}}"></div>
-						<div><p>{{item.product.name}}</p></div>
-						{% if item.product.discount %}
-						<div>
-							<del>${{item.product.price|floatformat:2}}</del>
-							<p>${{item.product.discount_price|floatformat:2}}</p>
-						</div>
-						{% else %}
-						<div>
-							<p>${{item.product.price|floatformat:2}}</p>
-						</div>
-						{% endif %}
-						<div>
-							<p class="quantity">{{item.quantity}}</p>
-							<div class="quantity">
-								<img data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart" src="{% static  'images/arrow-up.png' %}">
-			
-								<img data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart" src="{% static  'images/arrow-down.png' %}">
-							</div>
-						</div>
-						{% if item.product.discount %}
-						<div >
-							<del>${{item.get_total|floatformat:2}}</del>
-							<p>${{item.with_discount_get_total|floatformat:2}}</p>
-						</div>
-						{% else %}
-						<div >
-							<p>${{item.get_total|floatformat:2}}</p>
-						</div>
-						{% endif %}
-					</div>
+      {% if item.get_free_item_quantity %}
 
-					{% if item.get_free_item_quantity %}
+      <div class="grid grid-cols-5 gap-2 text-[16px] mb-2 mt-4">
+        <div>
+          <img class="row-image" src="{{item.get_free_item.imageURL}}" />
+        </div>
+        <div><p>{{item.get_free_item.name}}</p></div>
+        <div><p class="text-green-600">Free !</p></div>
+        <div><p>{{item.get_free_item_quantity}}</p></div>
+        <div><p>$--</p></div>
+      </div>
 
-						<div class="grid grid-cols-5 gap-2 text-[16px] mb-2 mt-4">
-							<div><img class="row-image" src="{{item.get_free_item.imageURL}}"></div>
-							<div><p>{{item.get_free_item.name}}</p></div>
-							<div><p class="text-green-600">Free !</p></div>
-							<div><p>{{item.get_free_item_quantity}}</p></div>
-							<div ><p>$--</p></div>
-						</div>	
+      {% endif %}
+      <hr />
+      {% endfor %} {% if cartItems >= 5 and min_priced_item %}
+      <h2 class="text-center text-xl font-medium text-indigo-800 mb-4 mt-4">
+        Congratulations! You have received a free product
+      </h2>
+      <div class="grid grid-cols-5 gap-2 mb-4">
+        <div>
+          <img class="row-image" src="{{ min_priced_item.product.imageURL }}" />
+        </div>
+        <div><p>{{ min_priced_item.product.name}}</p></div>
+        <div><p>${{ min_priced_item.product.price|floatformat:2 }}</p></div>
+        <div><p>x1</p></div>
+        <div>
+          <del class="">${{min_priced_item.product.price|floatformat:2}}</del>
+        </div>
+      </div>
+      <hr />
+      {% endif %}
 
-					{% endif %}
-					<hr>
-					{% endfor %}
+      <div class="text-lg p-6 space-y-2 mt-4 flex">
+        <table class="w-full border-collapse">
+          <tbody class="text-right text-black">
+            <tr>
+              <td>Products :</td>
+              <td class="font-medium ml-2">{{ order.get_cart_items }}</td>
+            </tr>
 
-					{% if cartItems >= 5 and min_priced_item %}
-					<h2 class="text-center text-xl font-medium text-indigo-800 mb-4 mt-4">Congratulations! You have received a free product</h2>
-						<div class="grid grid-cols-5 gap-2 mb-4">
-							<div><img class="row-image" src="{{ min_priced_item.product.imageURL }}"></div>
-							<div><p>{{ min_priced_item.product.name}}</p></div>
-							<div><p> ${{ min_priced_item.product.price|floatformat:2 }}</p></div>
-							<div><p>x1</p></div>
-							<div ><del class="">${{min_priced_item.product.price|floatformat:2}}</del></div>
-						</div>
-						<hr>
-					{% endif %}
-                 
+            {% if cartItems >= 5 %} {#
+            <tr>
+              <td>Bonus Product</td>
+              <td class="font-medium">: 1</td>
+            </tr>
+            #} {% endif %} {% if order.with_discount_get_cart_total <
+            order.get_cart_total %}
+            <tr>
+              <td>Product Price :</td>
+              <td>
+                <del class="font-medium ml-2"
+                  >${{ order.get_cart_total|floatformat:2 }}</del
+                >
+                <span class="font-medium ml-2"
+                  >${{ order.with_discount_get_cart_total|floatformat:2 }}</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Shipping Cost :</td>
+              <td class="font-medium">${{ shipping_cost }}</td>
+            </tr>
+            <tr>
+              <td>Total :</td>
+              <td class="font-medium ml-2">${{ total_with_discount }}</td>
+            </tr>
+            {% else %}
+            <tr>
+              <td>Product Price :</td>
+              <td class="font-medium">
+                ${{ order.get_cart_total|floatformat:2 }}
+              </td>
+            </tr>
+            <tr>
+              <td>Shipping Cost :</td>
+              <td class="font-medium">${{ shipping_cost }}</td>
+            </tr>
+            <tr>
+              <td>Total :</td>
+              <td class="font-medium ml-2">${{ total }}</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</header>
 
+<script src="https://www.paypal.com/sdk/js?client-id=AX-VrJu4eVcZgosPFC05U3X6XhpsOyfGU-M3TmlAXB6f4Z6Di6VZIHzMseRlKX3dWyuKn8dFJzTvnnP4&currency=USD&disable-funding=credit"></script>
 
-                  <div class="text-lg p-6 space-y-2 mt-4 flex">
-					<table class="w-full border-collapse ">
-						<tbody class="text-right text-black">
-						<tr>
-							<td>Products :</td>
-							<td class="font-medium ml-2">{{ order.get_cart_items }}</td>
-						</tr>
+<script>
+  var total = "{{ total_with_discount|default:total }}";
+  paypal
+    .Buttons({
+      style: {
+        color: "blue",
+        shape: "rect",
+      },
+      createOrder: function (data, actions) {
+        return actions.order.create({
+          purchase_units: [
+            {
+              amount: {
+                value: parseFloat(total).toFixed(2),
+              },
+            },
+          ],
+        });
+      },
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (details) {
+          submitFormData();
+        });
+      },
+    })
+    .render("#paypal-button-container");
+</script>
 
-						{% if cartItems >= 5 %}
-						{# <tr>
-							<td>Bonus Product</td>
-							<td class="font-medium">: 1</td>
-						</tr> #}
-						{% endif %}
+<script type="text/javascript">
+  var shipping = "{{ order.shipping }}" === "True";
 
-						{% if order.with_discount_get_cart_total < order.get_cart_total %}
-						<tr>
-							<td>Product Price :</td>
-							<td>
-							<del class="font-medium ml-2">${{ order.get_cart_total|floatformat:2 }}</del>
-							<span class="font-medium ml-2">${{ order.with_discount_get_cart_total|floatformat:2 }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td>Shipping Cost :</td>
-							<td class="font-medium">${{ shipping_cost }}</td>
-						</tr>
-						<tr>
-							<td>Total :</td>
-							<td class="font-medium ml-2">${{ total_with_discount }}</td>
-						</tr>
-						{% else %}
-						<tr>
-							<td>Product Price :</td>
-							<td class="font-medium">${{ order.get_cart_total|floatformat:2 }}</td>
-						</tr>
-						<tr>
-							<td>Shipping Cost :</td>
-							<td class="font-medium">${{ shipping_cost }}</td>
-						</tr>
-						<tr>
-							<td>Total :</td>
-							<td class="font-medium ml-2">${{ total }}</td>
-						</tr>
-						{% endif %}
-						</tbody>
-					</table>
-					</div>
+  if (!shipping) {
+    document.getElementById("shipping-info").innerHTML = "";
+  }
 
-			</div>
+  if (user !== "AnonymousUser") {
+    document.getElementById("user-info").innerHTML = "";
+  }
 
-		  </div>
-	  </header> 
+  if (!shipping && user !== "AnonymousUser") {
+    document.getElementById("form-wrapper").classList.add("hidden");
+    document.getElementById("payment-info").classList.remove("hidden");
+  }
 
+  function submitFormData() {
+    var form = document.getElementById("form-wrapper");
+    var userFormData = {
+      name: null,
+      email: null,
+      total: total,
+    };
 
+    var shippingInfo = {
+      address: null,
+      city: null,
+      state: null,
+      zipcode: null,
+    };
 
-	  <script src="https://www.paypal.com/sdk/js?client-id=AX-VrJu4eVcZgosPFC05U3X6XhpsOyfGU-M3TmlAXB6f4Z6Di6VZIHzMseRlKX3dWyuKn8dFJzTvnnP4&currency=USD&disable-funding=credit"></script>
+    console.log(form.address.value);
+    if (shipping) {
+      shippingInfo.address = form.address.value;
+      shippingInfo.city = form.city.value;
+      shippingInfo.state = form.country.value;
+      shippingInfo.zipcode = form.zip_code.value;
+    }
 
-	  <script>
-		  var total = '{{ total_with_discount|default:total }}';
-		  paypal.Buttons({
-			  style: {
-				  color: 'blue',
-				  shape: 'rect',
-			  },
-			  createOrder: function(data, actions) {
-				  return actions.order.create({
-					  purchase_units: [{
-						  amount: {
-							  value: parseFloat(total).toFixed(2)
-						  }
-					  }]
-				  });
-			  },
-			  onApprove: function(data, actions) {
-				  return actions.order.capture().then(function(details) {
-					  submitFormData()
-				  });
-			  }
-		  }).render('#paypal-button-container');
-	  </script>
-	  
-	  <script type="text/javascript">
-		  var shipping = '{{ order.shipping }}' === 'True';
-		  
-		  if (!shipping) {
-			  document.getElementById('shipping-info').innerHTML = '';
-		  }
-	  
-		  if (user !== 'AnonymousUser') {
-			  document.getElementById('user-info').innerHTML = '';
-		  }
-	  
-		  if (!shipping && user !== 'AnonymousUser') {
-			  document.getElementById('form-wrapper').classList.add("hidden");
-			  document.getElementById('payment-info').classList.remove("hidden");
-		  }
-	  
-		  function submitFormData() {
-			  var form = document.getElementById('form-wrapper');
-			  var userFormData = {
-				  'name': null,
-				  'email': null,
-				  'total': total,
-			  }
-	  
-			  var shippingInfo = {
-				  'address': null,
-				  'city': null,
-				  'state': null,
-				  'zipcode': null,
-			  }
-	          
-			  console.log(form.address.value);
-			  if (shipping) {
-				  shippingInfo.address = form.address.value;
-				  shippingInfo.city = form.city.value;
-				  shippingInfo.state = form.country.value;
-				  shippingInfo.zipcode = form.zip_code.value;
-			  }
-	  
-			  if (user === 'AnonymousUser') {
-				  userFormData.name = form.name.value;
-				  userFormData.email = form.email.value;
-			  }
-	  
-			  var url = "/process_order/"
-			  fetch(url, {
-				  method: 'POST',
-				  headers: {
-					  'Content-Type': 'application/json',
-					  'X-CSRFToken': csrftoken,
-				  },
-				  body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo }),
-			  })
-			  .then(response => response.json())
-			  .then(data => {
-				  alert('Transaction completed');
-				  cart = {};
-				  document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/";
-				  window.location.href = "{% url 'store' %}";
-			  });
-		  }
-	  </script>
-	  {% endblock content %}
+    if (user === "AnonymousUser") {
+      userFormData.name = form.name.value;
+      userFormData.email = form.email.value;
+    }
+
+    var url = "/process_order/";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      body: JSON.stringify({ form: userFormData, shipping: shippingInfo }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert("Transaction completed");
+        cart = {};
+        document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
+        window.location.href = "{% url 'store' %}";
+      });
+  }
+</script>
+{% endblock content %}

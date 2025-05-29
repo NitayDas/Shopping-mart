@@ -1,89 +1,106 @@
-{% extends 'store/main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'store/main.html' %} {% load static %} {% block content %} {% comment
+%} tailwind {% endcomment %}
 
+<header class="mt-12 ml-12">
+  <div class="bg-slate-100 shadow-lg p-8 border">
+    <a
+      class="text-lg bg-slate-200 p-2 rounded-md shadow-sm hover:bg-slate-400 hover:text-white"
+      href="{% url 'store' %}"
+      >&#x2190; Continue Shopping</a
+    >
+    <hr class="my-2" />
+    <div class="grid grid-cols-2 gap-12 mt-8 text-lg">
+      <h2>Items</h2>
+      <h2>Total Price</h2>
+    </div>
 
-	{% comment %} tailwind {% endcomment %}
+    <div class="grid grid-cols-2 gap-12 mt-4 mb-8">
+      <h5 class="font-semibold text-lg text-black">{{order.get_cart_items}}</h5>
+      {% if order.with_discount_get_cart_total < order.get_cart_total %}
+      <div>
+        <del class="font-semibold text-lg text-black">
+          ${{order.get_cart_total|floatformat:2}}</del
+        >
+        <h5 class="font-semibold text-lg text-black">
+          ${{order.with_discount_get_cart_total|floatformat:2}}
+        </h5>
+      </div>
+      {% else %}
+      <p class="font-semibold text-lg text-black">
+        ${{order.get_cart_total|floatformat:2}}
+      </p>
+      {% endif %}
+    </div>
+    <hr class="my-2" />
 
-	<header class="mt-12 ml-12">
-		<div class="bg-slate-100 shadow-lg p-8 border">
+    <div class="text-right">
+      <a
+        class="text-lg bg-slate-200 p-2 rounded-md shadow-sm hover:bg-slate-400 hover:text-white mr-8"
+        href="{% url 'checkout' %}"
+        >Proceed to <span class="font-semibold">Checkout</span
+        ><i class="ml-2 fa-solid fa-arrow-right"></i
+      ></a>
+    </div>
+  </div>
 
-			<a  class="text-lg bg-slate-200 p-2 rounded-md shadow-sm hover:bg-slate-400 hover:text-white" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
-			<hr class="my-2">
-			<div class="grid grid-cols-2 gap-12 mt-8 text-lg">
-                <h2>Items</h2>
-				<h2>Total Price</h2>
-			</div>
+  <div class="bg-slate-100 border shadow-lg p-8 mt-12">
+    <h1 class="text-2xl font-bold mb-8 text-center mt-4 text-black">
+      Your Shopping Cart
+    </h1>
+    <div class="grid grid-cols-5 gap-2 text-lg font-semibold mb-4">
+      <h2></h2>
+      <h2 class="text-black">Product</h2>
+      <h2 class="text-black">Price</h2>
+      <h2 class="text-black">Quantity</h2>
+      <h2 class="text-black">Total Price</h2>
+    </div>
 
-			<div class="grid grid-cols-2 gap-12 mt-4 mb-8">
-				<h5 class="font-semibold text-lg text-black">{{order.get_cart_items}}</h5>
-				{% if order.with_discount_get_cart_total < order.get_cart_total %}
-				<div>
-				<del class="font-semibold text-lg text-black"> ${{order.get_cart_total|floatformat:2}}</del>
-				<h5 class="font-semibold text-lg text-black"> ${{order.with_discount_get_cart_total|floatformat:2}}</h5>
-			   </div>
-				{% else %}
-				<p class="font-semibold text-lg text-black"> ${{order.get_cart_total|floatformat:2}}</p>
-				{% endif %}
-		    </div>
-			<hr class="my-2">
+    {% for item in items %}
+    <hr class="my-2" />
+    <div class="grid grid-cols-5 gap-2 text-[16px] mb-2">
+      <div><img class="row-image" src="{{item.product.imageURL}}" /></div>
+      <div><p>{{item.product.name}}</p></div>
+      {% if item.product.discount %}
+      <div>
+        <del>${{item.product.price|floatformat:2}}</del>
+        <p>${{item.product.discount_price|floatformat:2}}</p>
+      </div>
+      {% else %}
+      <div>
+        <p>${{item.product.price|floatformat:2}}</p>
+      </div>
+      {% endif %}
+      <div>
+        <p class="quantity">{{item.quantity}}</p>
+        <div class="quantity">
+          <img
+            data-product="{{item.product.id}}"
+            data-action="add"
+            class="chg-quantity update-cart"
+            src="{% static  'images/arrow-up.png' %}"
+          />
 
-			<div class="text-right">
-				<a class="text-lg bg-slate-200 p-2 rounded-md shadow-sm hover:bg-slate-400 hover:text-white mr-8" href="{% url 'checkout' %}">Proceed to 
-					<span class="font-semibold">Checkout</span><i class=" ml-2 fa-solid fa-arrow-right"></i></a>
-			</div>
+          <img
+            data-product="{{item.product.id}}"
+            data-action="remove"
+            class="chg-quantity update-cart"
+            src="{% static  'images/arrow-down.png' %}"
+          />
         </div>
-
-
-        <div class="bg-slate-100 border shadow-lg p-8 mt-12">
-        <h1 class="text-2xl font-bold mb-8 text-center mt-4 text-black">Your Shopping Cart</h1>
-        <div class="grid grid-cols-5 gap-2 text-lg font-semibold mb-4 ">
-			<h2></h2>
-			<h2 class=" text-black">Product</h2>
-			<h2 class=" text-black">Price</h2>
-			<h2 class=" text-black">Quantity</h2>
-			<h2 class=" text-black">Total Price</h2>
-		</div>
-
-		{% for item in items %}
-		<hr class="my-2">
-		<div class="grid grid-cols-5 gap-2 text-[16px] mb-2">
-			<div><img class="row-image" src="{{item.product.imageURL}}"></div>
-			<div><p>{{item.product.name}}</p></div>
-			 {% if item.product.discount %}
-			<div>
-				<del>${{item.product.price|floatformat:2}}</del>
-				<p>${{item.product.discount_price|floatformat:2}}</p>
-			</div>
-			{% else %}
-			<div>
-				<p>${{item.product.price|floatformat:2}}</p>
-			</div>
-			{% endif %}
-			<div>
-				<p class="quantity">{{item.quantity}}</p>
-				<div class="quantity">
-					<img data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart" src="{% static  'images/arrow-up.png' %}">
-
-					<img data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart" src="{% static  'images/arrow-down.png' %}">
-				</div>
-			</div>
-			{% if item.product.discount %}
-			<div>
-				<del>${{item.get_total|floatformat:2}}</del>
-				<p>${{item.with_discount_get_total|floatformat:2}}</p>
-			</div>
-			{% else %}
-			<div>
-				<p>${{item.get_total|floatformat:2}}</p>
-			</div>
-			{% endif %}
-			
-		</div>
-		{% endfor %}
-         <hr>
-	   </div>
-
-       
-    </header>
+      </div>
+      {% if item.product.discount %}
+      <div>
+        <del>${{item.get_total|floatformat:2}}</del>
+        <p>${{item.with_discount_get_total|floatformat:2}}</p>
+      </div>
+      {% else %}
+      <div>
+        <p>${{item.get_total|floatformat:2}}</p>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <hr />
+  </div>
+</header>
 {% endblock content %}

@@ -1,53 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shopping Cart</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
     <div class="container mx-auto py-8">
-        <h1 class="text-2xl font-bold mb-4">Your Shopping Cart</h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Item 1 -->
-            <div class="bg-white p-4 rounded-lg shadow">
-                <div class="flex justify-between items-center mb-4">
-                    <img src="item1.jpg" alt="Item 1" class="w-24 h-24 object-cover rounded">
-                    <h2 class="text-lg font-semibold">Item 1</h2>
-                    <span class="text-gray-500">Quantity: <input type="number" class="w-12 border rounded-md" value="1"></span>
-                </div>
-                <p class="text-gray-600">$19.99</p>
-                <label class="flex items-center mt-2">
-                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
-                    <span class="ml-2 text-gray-700">Add to Wishlist</span>
-                </label>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="bg-white p-4 rounded-lg shadow">
-                <div class="flex justify-between items-center mb-4">
-                    <img src="item2.jpg" alt="Item 2" class="w-24 h-24 object-cover rounded">
-                    <h2 class="text-lg font-semibold">Item 2</h2>
-                    <span class="text-gray-500">Quantity: <input type="number" class="w-12 border rounded-md" value="1"></span>
-                </div>
-                <p class="text-gray-600">$24.99</p>
-                <label class="flex items-center mt-2">
-                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
-                    <span class="ml-2 text-gray-700">Add to Wishlist</span>
-                </label>
-            </div>
-            <!-- Add more items as needed -->
-
+      <h1 class="text-2xl font-bold mb-4">Your Shopping Cart</h1>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Item 1 -->
+        <div class="bg-white p-4 rounded-lg shadow">
+          <div class="flex justify-between items-center mb-4">
+            <img
+              src="item1.jpg"
+              alt="Item 1"
+              class="w-24 h-24 object-cover rounded"
+            />
+            <h2 class="text-lg font-semibold">Item 1</h2>
+            <span class="text-gray-500"
+              >Quantity:
+              <input type="number" class="w-12 border rounded-md" value="1"
+            /></span>
+          </div>
+          <p class="text-gray-600">$19.99</p>
+          <label class="flex items-center mt-2">
+            <input
+              type="checkbox"
+              class="form-checkbox h-5 w-5 text-indigo-600"
+            />
+            <span class="ml-2 text-gray-700">Add to Wishlist</span>
+          </label>
         </div>
 
-        <div class="mt-8">
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-lg font-semibold">Total Items: <span class="text-gray-700">2</span></span>
-                <span class="text-lg font-semibold">Total Price: <span class="text-gray-700">$44.98</span></span>
-            </div>
-            <button class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">Proceed to Checkout</button>
+        <!-- Item 2 -->
+        <div class="bg-white p-4 rounded-lg shadow">
+          <div class="flex justify-between items-center mb-4">
+            <img
+              src="item2.jpg"
+              alt="Item 2"
+              class="w-24 h-24 object-cover rounded"
+            />
+            <h2 class="text-lg font-semibold">Item 2</h2>
+            <span class="text-gray-500"
+              >Quantity:
+              <input type="number" class="w-12 border rounded-md" value="1"
+            /></span>
+          </div>
+          <p class="text-gray-600">$24.99</p>
+          <label class="flex items-center mt-2">
+            <input
+              type="checkbox"
+              class="form-checkbox h-5 w-5 text-indigo-600"
+            />
+            <span class="ml-2 text-gray-700">Add to Wishlist</span>
+          </label>
         </div>
+        <!-- Add more items as needed -->
+      </div>
+
+      <div class="mt-8">
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-lg font-semibold"
+            >Total Items: <span class="text-gray-700">2</span></span
+          >
+          <span class="text-lg font-semibold"
+            >Total Price: <span class="text-gray-700">$44.98</span></span
+          >
+        </div>
+        <button
+          class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+        >
+          Proceed to Checkout
+        </button>
+      </div>
     </div>
-</body>
+  </body>
 </html>

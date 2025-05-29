@@ -1,36 +1,61 @@
-{% extends 'store/main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'store/main.html' %} {% load static %} {% block content %}
 
-    <header class="mt-12 ml-12">
+<header class="mt-12 ml-12">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mr-4">
+    {% for product in products %}
+    <div class="rounded-md border shadow-lg">
+      <img
+        class="thumbnail p-4"
+        src="{{ product.imageURL }}"
+        alt="{{ product.name }}"
+      />
+      {% if product.discount %}
+      <h4 class="font-bold mt-2 ml-4">
+        <strong>-{{ product.discount|floatformat:2 }} %</strong>
+      </h4>
+      {% endif %} {% if product.bulk_discount_free_items %}
+      <p class="text-right mr-4 font-semibold">
+        Buy {{ product.bulk_discount_threshold }} get {{
+        product.bulk_discount_free_items }}
+        <span class="text-md text-red-500">{{ product.free_item_for }}</span>
+        <span class="text-green-400">Free </span>!
+      </p>
+      {% endif%}
+      <div class="p-4 border border-gray-200 rounded-md shadow-md">
+        <h6><strong>{{ product.name }}</strong></h6>
+        <hr class="my-2" />
+        <button
+          data-product="{{"
+          product.id
+          }}
+          data-action="add"
+          class="btn btn-outline-secondary add-btn update-cart bg-slate-200 hover:bg-slate-300 mr-2"
+        >
+          Add to Cart
+        </button>
+        <a
+          class="btn btn-outline-primary bg-slate-200 hover:bg-slate-300"
+          href="#"
+          >View</a
+        >
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mr-4">
-      {% for product in products %}
-        <div class="rounded-md border shadow-lg">
-          <img class="thumbnail p-4" src="{{ product.imageURL }}" alt="{{ product.name }}">
-          {% if product.discount %}
-          <h4 class=" font-bold mt-2 ml-4"><strong>-{{ product.discount|floatformat:2 }} %</strong></h4>
-          {% endif %}
-          {% if product.bulk_discount_free_items %}
-          <p class="text-right mr-4 font-semibold">Buy {{ product.bulk_discount_threshold }} get {{ product.bulk_discount_free_items }} <span class="text-md text-red-500">{{ product.free_item_for }}</span> <span class="text-green-400">Free </span>!</p>
-          {% endif%}
-          <div class="p-4 border border-gray-200 rounded-md shadow-md">
-              <h6><strong>{{ product.name }}</strong></h6>
-              <hr class="my-2">
-              <button data-product={{ product.id }} data-action="add" class="btn btn-outline-secondary add-btn update-cart bg-slate-200 hover:bg-slate-300 mr-2">Add to Cart</button>
-              <a class="btn btn-outline-primary bg-slate-200 hover:bg-slate-300" href="#">View</a>
-              
-              {% if product.discount %}
-              <div class="float-right flex">
-                <del class=" font-bold mt-2 mr-2"><strong>${{ product.price|floatformat:2 }}</strong></del>
-                <h4 class=" font-bold mt-2"><strong>${{ product.discount_price|floatformat:2 }}</strong></h4>
-              </div>
-              {% else %}
-              <h4 class="inline-block float-right font-bold mt-2"><strong>${{ product.price|floatformat:2 }}</strong></h4>
-             {% endif %}
-          </div>
+        {% if product.discount %}
+        <div class="float-right flex">
+          <del class="font-bold mt-2 mr-2"
+            ><strong>${{ product.price|floatformat:2 }}</strong></del
+          >
+          <h4 class="font-bold mt-2">
+            <strong>${{ product.discount_price|floatformat:2 }}</strong>
+          </h4>
         </div>
-        {% endfor %}
+        {% else %}
+        <h4 class="inline-block float-right font-bold mt-2">
+          <strong>${{ product.price|floatformat:2 }}</strong>
+        </h4>
+        {% endif %}
       </div>
-    </header>
+    </div>
+    {% endfor %}
+  </div>
+</header>
 {% endblock content %}

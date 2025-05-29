@@ -1,66 +1,86 @@
-{% extends 'store/main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'store/main.html' %} {% load static %} {% block content %} {% comment
+%} tailwind {% endcomment %}
 
+<header class="mt-12 ml-12 mr-12">
+  <div class="bg-slate-100 border shadow-lg p-8 mt-12">
+    <a
+      class="text-lg bg-slate-200 p-2 rounded-md shadow-sm hover:bg-slate-400 hover:text-white"
+      href="{% url 'store' %}"
+      >&#x2190; Continue Shopping</a
+    >
+    <hr class="my-2" />
+    <h1 class="text-2xl font-bold mb-8 text-center mt-4 text-black">
+      order overview
+    </h1>
+    <div class="grid grid-cols-7 gap-2 text-lg mb-4">
+      <h2 class="font-semibold text-black">total Items</h2>
+      <h2 class="font-semibold text-black">Price</h2>
+      <h2 class="font-semibold text-black">shipping cost</h2>
+      <h2 class="font-semibold text-black">status</h2>
+      <h2 class="font-semibold text-black">Date</h2>
+      <h2 class="font-semibold text-black">Total</h2>
+      <h2></h2>
+    </div>
 
-	{% comment %} tailwind {% endcomment %}
+    <hr class="my-2" />
+    {% for order in orders %}
+    <div class="grid grid-cols-7 gap-5 text-lg mb-4">
+      <p>{{ order.get_cart_items }}</p>
+      {% if order.with_discount_get_cart_total < order.get_cart_total %}
+      <div>
+        <del class="text-lg text-black">
+          ${{order.get_cart_total|floatformat:2}}</del
+        >
+        <h5 class="text-lg text-black">
+          ${{order.with_discount_get_cart_total|floatformat:2}}
+        </h5>
+      </div>
+      {% else %}
+      <p class="text-lg text-black">${{order.get_cart_total|floatformat:2}}</p>
+      {% endif %}
+      <p>${{ order.shipping_cost }}</p>
+      {% if order.refund_granted %}
+      <p>refund approved</p>
+      {% elif order.refund_requested %}
+      <p>requested for refund</p>
+      {% else %}
+      <p>{{ order.status }}</p>
+      {% endif %}
+      <p>{{ order.date_order }}</p>
+      <p>${{ order.total_with_shipping|floatformat:2 }}</p>
+      <div class="flex flex-col gap-2">
+        <a href="{% url 'view_details' order.id %}"
+          ><button
+            class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-amber-500 to-amber-400 hover:text-black"
+          >
+            View Details
+          </button></a
+        >
+        {% if order.status == 'complete' %}
+        <a href="{% url 'cancel_order' order.id %}"
+          ><button
+            class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black"
+          >
+            cancel order
+          </button></a
+        >
+        {% endif %} {% if order.status == 'delivered' and not
+        order.refund_requested %}
+        <a href="{% url 'request-refund' order.id %}"
+          ><button
+            class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black"
+          >
+            Return order
+          </button></a
+        >
+        {% endif %}
+      </div>
+    </div>
+    <hr class="my-2" />
 
-	<header class="mt-12 ml-12 mr-12">
-
-        <div class="bg-slate-100 border shadow-lg p-8 mt-12">
-            <a  class="text-lg bg-slate-200 p-2 rounded-md shadow-sm hover:bg-slate-400 hover:text-white" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
-			<hr class="my-2">
-            <h1 class="text-2xl font-bold mb-8 text-center mt-4 text-black">order overview</h1>
-            <div class="grid grid-cols-7 gap-2 text-lg mb-4 ">
-
-                <h2 class="font-semibold text-black">total Items</h2>
-                <h2 class="font-semibold text-black">Price</h2>
-                <h2 class="font-semibold text-black">shipping cost</h2>
-                <h2 class="font-semibold text-black">status</h2>
-                <h2 class="font-semibold text-black">Date</h2>
-                <h2 class="font-semibold text-black">Total</h2>
-                <h2></h2>
-            </div>
-
-            <hr class="my-2">
-            {% for order in orders %}
-            <div class="grid grid-cols-7 gap-5 text-lg mb-4 ">
-                <p>{{ order.get_cart_items }}</p>
-                {% if order.with_discount_get_cart_total < order.get_cart_total %}
-				<div>
-				<del class=" text-lg text-black"> ${{order.get_cart_total|floatformat:2}}</del>
-				<h5 class=" text-lg text-black"> ${{order.with_discount_get_cart_total|floatformat:2}}</h5>
-			    </div>
-				{% else %}
-				<p class=" text-lg text-black"> ${{order.get_cart_total|floatformat:2}}</p>
-				{% endif %}
-                <p>${{ order.shipping_cost }}</p>
-                {% if order.refund_granted %}
-                <p>refund approved</p>
-                {% elif order.refund_requested %}
-                <p>requested for refund</p>
-                {% else %}
-                <p>{{ order.status }}</p>
-                {% endif %}
-                <p>{{ order.date_order }}</p>
-                <p>${{ order.total_with_shipping|floatformat:2 }}</p>
-                <div class="flex flex-col gap-2">
-                    <a href="{% url 'view_details' order.id %}"><button class="text-white text-md p-2 rounded-sm bg-gradient-to-r from-amber-500 to-amber-400 hover:text-black">View Details</button></a>
-                    {% if order.status == 'complete' %}
-                    <a href="{% url 'cancel_order' order.id %}"><button class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black">cancel order</button></a>
-                    {% endif %}
-                    {% if order.status == 'delivered' and not order.refund_requested %}
-                    <a href="{% url 'request-refund' order.id %}"><button class="text-white text-sm p-2 rounded-sm bg-gradient-to-r from-red-500 to-red-400 hover:text-black">Return order</button></a>
-                    {% endif %}
-                   
-                </div> 
-            </div>
-            <hr class="my-2">
-
-            {% empty %}
-                <li>No orders found.</li>
-            {% endfor %}
-	   </div>
-
-    </header>
+    {% empty %}
+    <li>No orders found.</li>
+    {% endfor %}
+  </div>
+</header>
 {% endblock content %}
