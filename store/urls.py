@@ -17,6 +17,5 @@ urlpatterns = [
         path('view_details/<int:order_id>/', views.view_details, name="view_details"),
         path('request-refund/<int:order_id>/', RequestRefund.as_view(), name='request-refund'),
         path('item_request-refund/<int:order_id>/<int:item_id>', ItemRequestRefund.as_view(), name='item_request-refund'),
-        # path('deliver_order/<int:order_id>/', views.deliverOrder, name="deliver_order"),
         
 ]
