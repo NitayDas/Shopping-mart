@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-3_4+&7+vrs3(lo5$f2*6%)w5$0ks@6orfd3=mwnb_(w8+us*ad
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = [ 'takebook.kapotakkho.online','86.48.3.219', '127.0.0.1']
+ALLOWED_HOSTS = [ 'mart.kapotakkho.online','86.48.3.219', '127.0.0.1']
 
 
 
