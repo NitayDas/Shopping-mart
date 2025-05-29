@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -32,10 +31,9 @@ class Product(models.Model):
         except:
             url = ''
         return url
-    
-    
+
+
 class Order(models.Model):
-    
     ORDER_STATUS_CHOICES = [
         ('not_ordered', 'Not Ordered'),
         ('complete', 'Complete'),
@@ -47,7 +45,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
     date_order = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='not_ordered')
-    transaction_id = models.CharField(max_length=200, null=True)
+    # transaction_id = models.CharField(max_length=200, null=True)
     refund_requested = models.BooleanField(null=True,default=False)
     refund_granted = models.BooleanField(null=True,default=False)
     
@@ -138,14 +136,59 @@ class OrderItem(models.Model):
             return self.product.free_item_for
         return None
     
+
+
 class ShippingAddress(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     address = models.CharField(max_length=200, null=True)
     city = models.CharField(max_length=200, null=True)
-    country = models.CharField(max_length=200, null=True)
-    zip_code = models.CharField(max_length=200, null=True)
+    state = models.CharField(max_length=200, null=True)
+    zipcode = models.CharField(max_length=200, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.address
+    
+class Refund(models.Model):
+    RETURN_STATUS_CHOICES = [
+        ('no_refund','No_refund'),
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    reason = models.TextField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=RETURN_STATUS_CHOICES, default='no_refund')
+    date_requested = models.DateTimeField(auto_now_add=True)
+    date_completed = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f'Return {self.id} for OrderItem {self.order.id}'
+    
+class refundItem(models.Model):
+    RETURN_STATUS_CHOICES = [
+        ('no_refund','No_refund'),
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+        
+    ]
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    item = models.ForeignKey(Product,on_delete=models.CASCADE,null=True)
+    reason = models.TextField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=RETURN_STATUS_CHOICES, default='no_refund')
+    quantity = models.IntegerField(default=0, null=True, blank=True)
+    date_requested = models.DateTimeField(auto_now_add=True)
+    date_completed = models.DateTimeField(null=True, blank=True)
+    refund_amount = models.FloatField(max_length=200, null=True)
+    
+    @property
+    def get_status(self):
+        return self.status
+
+    def __str__(self):
+        return f'Returnitem {self.item} for OrderItem {self.order.id}'
+    
